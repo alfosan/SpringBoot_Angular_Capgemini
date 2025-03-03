@@ -1,9 +1,10 @@
-package com.capgemini.backend.SpringBoot.infraestructure.jpa.repo_Impl.client;
 
-import com.capgemini.backend.SpringBoot.domain.model.client.Cliente;
-import com.capgemini.backend.SpringBoot.domain.repo.client.ClienteRepository;
+package com.capgemini.backend.SpringBoot.infraestructure.jpa.repo_Impl.prestamos;
+
+import com.capgemini.backend.SpringBoot.domain.model.prestamos.Prestamo;
+import com.capgemini.backend.SpringBoot.domain.repo.prestamos.PrestamoRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClienteRepositoryImpl extends JpaRepository<Cliente, Long>, ClienteRepository {}
+public interface PrestamoRepositoryImpl extends JpaRepository<Prestamo, Long>, PrestamoRepository {}
