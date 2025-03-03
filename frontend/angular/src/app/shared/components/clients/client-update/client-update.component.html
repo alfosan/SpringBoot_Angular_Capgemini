@@ -1,0 +1,13 @@
+<div class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="onClose()">&times;</span>
+      <h2>Update Client</h2>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" [(ngModel)]="clientName" name="name" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+      </form>
+    </div>
+  </div>

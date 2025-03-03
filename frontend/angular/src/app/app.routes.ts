@@ -11,6 +11,10 @@ export const routes: Routes = [
     path: 'home',
     loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
   },
+  {
+    path: 'clients',
+    loadChildren: () => import('./modules/clients/clients.module').then(m => m.ClientsModule)
+  },
   { 
     path: '404', 
     component: ErrorComponent 
