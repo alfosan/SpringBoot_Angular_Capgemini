@@ -4,12 +4,12 @@ import { PrestamoService } from '../../../../core/services/prestamos/prestamo.se
 import { Prestamo } from '../../../../core/models/prestamos/prestamo.model';
 import { PrestamoFiltersComponent } from '../prestamo-filters/prestamo-filters.component';
 import { PrestamoPaginationComponent } from '../prestamo-pagination/prestamo-pagination.component';
-import { ErrorMessageComponent } from '../../error/exceptions/error-message.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-prestamo-list',
   standalone: true,
-  imports: [CommonModule, PrestamoFiltersComponent, PrestamoPaginationComponent, ErrorMessageComponent],
+  imports: [CommonModule, PrestamoFiltersComponent, PrestamoPaginationComponent],
   templateUrl: './prestamo-list.component.html',
   styleUrls: ['./prestamo-list.component.css']
 })
@@ -18,7 +18,6 @@ export class PrestamoListComponent implements OnInit {
   totalPages: number = 0;
   currentPage: number = 0;
   filters: { nombreJuego: string, nombreCliente: string, fecha: string } = { nombreJuego: '', nombreCliente: '', fecha: '' };
-  errorMessage: string | null = null;
 
   constructor(private prestamoService: PrestamoService) {}
 
@@ -31,10 +30,9 @@ export class PrestamoListComponent implements OnInit {
       (data: any) => {
         this.prestamos = data.content;
         this.totalPages = data.totalPages;
-        this.errorMessage = null;
       },
       (error: string) => {
-        this.errorMessage = error;
+        this.showError(error);
       }
     );
   }
@@ -54,5 +52,14 @@ export class PrestamoListComponent implements OnInit {
   onPageChange(page: number) {
     this.currentPage = page;
     this.loadPrestamos();
+  }
+
+  private showError(error: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error,
+      confirmButtonText: 'OK'
+    });
   }
 }

@@ -5,6 +5,7 @@ import { Game } from '../../../../core/models/games/game.model';
 import { GameUpdateComponent } from '../game-update/game-update.component';
 import { GameDeleteComponent } from '../game-delete/game-delete.component';
 import { GameCreateComponent } from '../game-create/game-create.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-game-list',
@@ -22,9 +23,18 @@ export class GameListComponent implements OnInit {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.getGames().subscribe((data: Game[]) => {
-      this.games = data;
-    });
+    this.loadGames();
+  }
+
+  loadGames() {
+    this.gameService.getGames().subscribe(
+      (data: Game[]) => {
+        this.games = data;
+      },
+      (error: string) => {
+        this.showError(error);
+      }
+    );
   }
 
   openUpdateModal(game: Game) {
@@ -37,13 +47,18 @@ export class GameListComponent implements OnInit {
 
   updateGame(updatedGame: Game) {
     if (this.selectedGame) {
-      this.gameService.updateGame(this.selectedGame.id, updatedGame).subscribe((game: Game) => {
-        const index = this.games.findIndex(g => g.id === game.id);
-        if (index !== -1) {
-          this.games[index] = game;
+      this.gameService.updateGame(this.selectedGame.id, updatedGame).subscribe(
+        (game: Game) => {
+          const index = this.games.findIndex(g => g.id === game.id);
+          if (index !== -1) {
+            this.games[index] = game;
+          }
+          this.closeUpdateModal();
+        },
+        (error: string) => {
+          this.showError(error);
         }
-        this.closeUpdateModal();
-      });
+      );
     }
   }
 
@@ -56,10 +71,15 @@ export class GameListComponent implements OnInit {
   }
 
   deleteGame(gameId: number) {
-    this.gameService.deleteGame(gameId).subscribe(() => {
-      this.games = this.games.filter(game => game.id !== gameId);
-      this.closeDeleteModal();
-    });
+    this.gameService.deleteGame(gameId).subscribe(
+      () => {
+        this.games = this.games.filter(game => game.id !== gameId);
+        this.closeDeleteModal();
+      },
+      (error: string) => {
+        this.showError(error);
+      }
+    );
   }
 
   openRegisterModal() {
@@ -71,9 +91,23 @@ export class GameListComponent implements OnInit {
   }
 
   registerGame(newGame: { titulo: string }) {
-    this.gameService.registerGame(newGame).subscribe((game: Game) => {
-      this.games.push(game);
-      this.closeRegisterModal();
+    this.gameService.registerGame(newGame).subscribe(
+      (game: Game) => {
+        this.games.push(game);
+        this.closeRegisterModal();
+      },
+      (error: string) => {
+        this.showError(error);
+      }
+    );
+  }
+
+  private showError(error: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error,
+      confirmButtonText: 'OK'
     });
   }
 }

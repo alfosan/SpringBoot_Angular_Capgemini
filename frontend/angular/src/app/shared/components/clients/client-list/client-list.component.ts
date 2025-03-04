@@ -5,6 +5,7 @@ import { Client } from '../../../../core/models/clients/client.model';
 import { ClientUpdateComponent } from '../client-update/client-update.component';
 import { ClientDeleteComponent } from '../client-delete/client-delete.component';
 import { ClientRegisterComponent } from '../client-register/client-register.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-client-list',
@@ -22,9 +23,18 @@ export class ClientListComponent implements OnInit {
   constructor(private clientService: ClientService) {}
 
   ngOnInit(): void {
-    this.clientService.getClients().subscribe((data: Client[]) => {
-      this.clients = data;
-    });
+    this.loadClients();
+  }
+
+  loadClients() {
+    this.clientService.getClients().subscribe(
+      (data: Client[]) => {
+        this.clients = data;
+      },
+      (error: string) => {
+        this.showError(error);
+      }
+    );
   }
 
   openUpdateModal(client: Client) {
@@ -37,13 +47,18 @@ export class ClientListComponent implements OnInit {
 
   updateClient(updatedClient: Client) {
     if (this.selectedClient) {
-      this.clientService.updateClient(this.selectedClient.id, updatedClient).subscribe((client: Client) => {
-        const index = this.clients.findIndex(c => c.id === client.id);
-        if (index !== -1) {
-          this.clients[index] = client;
+      this.clientService.updateClient(this.selectedClient.id, updatedClient).subscribe(
+        (client: Client) => {
+          const index = this.clients.findIndex(c => c.id === client.id);
+          if (index !== -1) {
+            this.clients[index] = client;
+          }
+          this.closeUpdateModal();
+        },
+        (error: string) => {
+          this.showError(error);
         }
-        this.closeUpdateModal();
-      });
+      );
     }
   }
 
@@ -56,10 +71,15 @@ export class ClientListComponent implements OnInit {
   }
 
   deleteClient(clientId: number) {
-    this.clientService.deleteClient(clientId).subscribe(() => {
-      this.clients = this.clients.filter(client => client.id !== clientId);
-      this.closeDeleteModal();
-    });
+    this.clientService.deleteClient(clientId).subscribe(
+      () => {
+        this.clients = this.clients.filter(client => client.id !== clientId);
+        this.closeDeleteModal();
+      },
+      (error: string) => {
+        this.showError(error);
+      }
+    );
   }
 
   openRegisterModal() {
@@ -71,9 +91,23 @@ export class ClientListComponent implements OnInit {
   }
 
   registerClient(newClient: { nombre: string }) {
-    this.clientService.registerClient(newClient).subscribe((client: Client) => {
-      this.clients.push(client);
-      this.closeRegisterModal();
+    this.clientService.registerClient(newClient).subscribe(
+      (client: Client) => {
+        this.clients.push(client);
+        this.closeRegisterModal();
+      },
+      (error: string) => {
+        this.showError(error);
+      }
+    );
+  }
+
+  private showError(error: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error,
+      confirmButtonText: 'OK'
     });
   }
 }
