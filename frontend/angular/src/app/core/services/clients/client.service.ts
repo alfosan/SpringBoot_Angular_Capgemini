@@ -15,4 +15,12 @@ export class ClientService {
   getClients(): Observable<Client[]> {
     return this.http.get<Client[]>(this.apiUrl);
   }
+
+  updateClient(id: number, client: Client): Observable<Client> {
+    return this.http.put<Client>(`${this.apiUrl}/${id}`, client);
+  }
+
+  deleteClient(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
