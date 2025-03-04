@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Client } from '../../../../core/models/clients/client.model';
 
 @Component({
   selector: 'app-client-register',

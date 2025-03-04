@@ -70,7 +70,7 @@ export class ClientListComponent implements OnInit {
     this.showRegisterModal = false;
   }
 
-  registerClient(newClient: Client) {
+  registerClient(newClient: { nombre: string }) {
     this.clientService.registerClient(newClient).subscribe((client: Client) => {
       this.clients.push(client);
       this.closeRegisterModal();
