@@ -1,14 +1,7 @@
 package com.capgemini.backend.SpringBoot.presentation.controller.prestamos;
 
-import com.capgemini.backend.SpringBoot.application.dto.prestamos.PrestamoDTO;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.ClienteNoReconocidoException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.FechaNoValidaException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.FiltroFallidoException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.JuegoNoReconocidoException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.PrestamoMaximoException;
 import com.capgemini.backend.SpringBoot.application.service.prestamos.PrestamoService;
 import com.capgemini.backend.SpringBoot.domain.model.prestamos.Prestamo;
-import com.capgemini.backend.SpringBoot.presentation.assembler.prestamos.PrestamoAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/prestamos")
@@ -29,50 +21,51 @@ public class PrestamoController {
     private PrestamoService prestamoService;
 
     @GetMapping
-    public List<PrestamoDTO> getAllPrestamos() {
-        return prestamoService.getAllPrestamos().stream()
-                .map(PrestamoAssembler::toDTO)
-                .collect(Collectors.toList());
+    public List<Prestamo> getAllPrestamos() {
+        return prestamoService.getAllPrestamos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PrestamoDTO> getPrestamoById(@PathVariable Long id) {
+    public ResponseEntity<Prestamo> getPrestamoById(@PathVariable Long id) {
         Optional<Prestamo> prestamo = prestamoService.getPrestamoById(id);
-        return prestamo.map(p -> ResponseEntity.ok(PrestamoAssembler.toDTO(p)))
-                       .orElseGet(() -> ResponseEntity.notFound().build());
+        return prestamo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<PrestamoDTO> createPrestamo(@RequestBody PrestamoDTO prestamoDTO) {
-        Prestamo prestamo = PrestamoAssembler.toEntity(prestamoDTO);
-        Prestamo nuevoPrestamo = prestamoService.createPrestamo(prestamo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(PrestamoAssembler.toDTO(nuevoPrestamo));
+    public ResponseEntity<Prestamo> createPrestamo(@RequestBody Prestamo prestamo) {
+        try {
+            Prestamo createdPrestamo = prestamoService.createPrestamo(prestamo);
+            return new ResponseEntity<>(createdPrestamo, HttpStatus.CREATED);
+        } catch (RuntimeException ex) {
+            throw ex;
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PrestamoDTO> updatePrestamo(@PathVariable Long id, @RequestBody PrestamoDTO prestamoDTO) {
-        Prestamo prestamo = PrestamoAssembler.toEntity(prestamoDTO);
-        Prestamo prestamoActualizado = prestamoService.updatePrestamo(id, prestamo);
-        return prestamoActualizado != null ? ResponseEntity.ok(PrestamoAssembler.toDTO(prestamoActualizado)) : ResponseEntity.notFound().build();
+    public ResponseEntity<Prestamo> updatePrestamo(@PathVariable Long id, @RequestBody Prestamo prestamo) {
+        Prestamo updatedPrestamo = prestamoService.updatePrestamo(id, prestamo);
+        if (updatedPrestamo != null) {
+            return new ResponseEntity<>(updatedPrestamo, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrestamo(@PathVariable Long id) {
-        return prestamoService.deletePrestamo(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        if (prestamoService.deletePrestamo(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/filter")
-    public Page<PrestamoDTO> filterPrestamos(
+    public Page<Prestamo> findByFilters(
             @RequestParam(required = false) String nombreJuego,
             @RequestParam(required = false) String nombreCliente,
             @RequestParam(required = false) LocalDate fecha,
             Pageable pageable) {
-        return prestamoService.findByFilters(nombreJuego, nombreCliente, fecha, pageable)
-                .map(PrestamoAssembler::toDTO);
-    }
-
-    @ExceptionHandler({ClienteNoReconocidoException.class, JuegoNoReconocidoException.class, FiltroFallidoException.class, FechaNoValidaException.class, PrestamoMaximoException.class})
-    public ResponseEntity<String> handleException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return prestamoService.findByFilters(nombreJuego, nombreCliente, fecha, pageable);
     }
 }

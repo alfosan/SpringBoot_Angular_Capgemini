@@ -1,10 +1,6 @@
 package com.capgemini.backend.SpringBoot.application.service_Impl.prestamos;
 
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.ClienteNoReconocidoException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.FechaNoValidaException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.FiltroFallidoException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.JuegoNoReconocidoException;
-import com.capgemini.backend.SpringBoot.application.exception.prestamos.PrestamoMaximoException;
+import com.capgemini.backend.SpringBoot.application.exception.prestamos.*;
 import com.capgemini.backend.SpringBoot.application.service.client.ClienteService;
 import com.capgemini.backend.SpringBoot.application.service.games.GameService;
 import com.capgemini.backend.SpringBoot.application.service.prestamos.PrestamoService;
