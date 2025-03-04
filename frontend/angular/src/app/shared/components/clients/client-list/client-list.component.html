@@ -27,7 +27,7 @@
         </table>
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-        <button class="btn btn-success">
+        <button class="btn btn-success" (click)="openRegisterModal()">
           <i class="fas fa-plus me-2"></i>Registrar Nuevo Cliente
         </button>
       </div>
@@ -47,4 +47,10 @@
     (delete)="deleteClient($event)"
     (close)="closeDeleteModal()">
   </app-client-delete>
+
+  <app-client-register
+    *ngIf="showRegisterModal"
+    (register)="registerClient($event)"
+    (close)="closeRegisterModal()">
+  </app-client-register>
 </div>

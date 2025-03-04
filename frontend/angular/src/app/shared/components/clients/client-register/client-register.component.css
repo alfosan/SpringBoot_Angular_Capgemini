@@ -1,4 +1,4 @@
-/* Modal styles */
+/* Modal base styles */
 .modal {
   display: block;
   position: fixed;
@@ -13,15 +13,15 @@
 }
 
 .modal-content {
-  background-color: #ffffff;
+  background: linear-gradient(145deg, #ffffff, #f5f7fa);
   margin: 10% auto;
-  padding: 30px;
+  padding: 30px 40px;
   border: none;
   width: 90%;
   max-width: 500px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: modalSlideIn 0.3s ease-out;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: modalSlideIn 0.4s ease-out;
 }
 
 @keyframes modalSlideIn {
@@ -36,73 +36,64 @@
 }
 
 .close {
-  color: #666;
+  color: #64748b;
   float: right;
-  font-size: 24px;
-  font-weight: bold;
-  transition: all 0.2s ease;
-  padding: 5px 10px;
-  border-radius: 50%;
+  font-size: 32px;
+  font-weight: 300;
+  transition: all 0.3s ease;
+  margin: -15px -15px 0 0;
 }
 
 .close:hover,
 .close:focus {
-  color: #333;
-  background-color: #f0f0f0;
-  text-decoration: none;
-  cursor: pointer;
+  color: #1e293b;
   transform: rotate(90deg);
+  cursor: pointer;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin: 25px 0;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
+  color: #334155;
   font-weight: 500;
-  color: #333;
   font-size: 0.95rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px;
-  box-sizing: border-box;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .form-group input:focus {
-  border-color: #4a90e2;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  border-color: #64748b;
+  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.1);
 }
 
 .btn-primary {
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
+  font-weight: 500;
   width: 100%;
+  margin-top: 20px;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .btn-primary:hover {
-  background-color: #357abd;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.2);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.1);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
 }
