@@ -19,6 +19,10 @@ export const routes: Routes = [
     path: 'games',
     loadChildren: () => import('./modules/games/games.module').then(m => m.GamesModule)
   },
+  {
+    path: 'prestamos',
+    loadChildren: () => import('./modules/prestamos/prestamos.module').then(m => m.PrestamosModule)
+  },
   { 
     path: '404', 
     component: ErrorComponent 

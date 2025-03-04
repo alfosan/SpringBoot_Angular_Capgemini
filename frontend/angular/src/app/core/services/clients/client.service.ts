@@ -24,7 +24,7 @@ export class ClientService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  registerClient(client: Client): Observable<Client> {
+  registerClient(client: { nombre: string }): Observable<Client> {
     return this.http.post<Client>(this.apiUrl, client);
   }
 }
