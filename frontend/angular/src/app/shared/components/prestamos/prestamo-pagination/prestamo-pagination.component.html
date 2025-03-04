@@ -1,0 +1,43 @@
+<nav aria-label="Page navigation" class="mt-4">
+  <ul class="pagination justify-content-center list-unstyled">
+      <div class="page-item" [class.disabled]="currentPage === 0">
+          <a class="page-link rounded-start shadow-sm border-0" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+              <span>←</span>
+          </a>
+      </div>
+        
+      <!-- Primera página -->
+      <div class="page-item" [class.active]="currentPage === 0">
+          <a class="page-link shadow-sm border-0" (click)="onPageChange(0)">1</a>
+      </div>
+        
+      <!-- Puntos suspensivos iniciales -->
+      <div class="page-item disabled" *ngIf="currentPage > 2">
+          <span class="page-link border-0">...</span>
+      </div>
+        
+      <!-- Páginas dinámicas -->
+      <div class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index">
+          <a class="page-link shadow-sm border-0" (click)="onPageChange(i)"
+             *ngIf="i > 0 && i < totalPages - 1 && (i >= currentPage - 1 && i <= currentPage + 1)">
+              {{ i + 1 }}
+          </a>
+      </div>
+        
+      <!-- Puntos suspensivos finales -->
+      <div class="page-item disabled" *ngIf="currentPage < totalPages - 3">
+          <span class="page-link border-0">...</span>
+      </div>
+        
+      <!-- Última página -->
+      <div class="page-item" *ngIf="totalPages > 1" [class.active]="currentPage === totalPages - 1">
+          <a class="page-link shadow-sm border-0" (click)="onPageChange(totalPages - 1)">{{ totalPages }}</a>
+      </div>
+        
+      <div class="page-item" [class.disabled]="currentPage === totalPages - 1">
+          <a class="page-link rounded-end shadow-sm border-0" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+              <span>→</span>
+          </a>
+      </div>
+  </ul>
+</nav>

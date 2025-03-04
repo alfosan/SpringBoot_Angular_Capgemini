@@ -1,0 +1,33 @@
+<div class="filters">
+  <form (ngSubmit)="onFilter()">
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="nombreJuego">Game Name</label>
+          <input type="text" id="nombreJuego" [(ngModel)]="nombreJuego" name="nombreJuego" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="nombreCliente">Client Name</label>
+          <input type="text" id="nombreCliente" [(ngModel)]="nombreCliente" name="nombreCliente" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="fecha">Date</label>
+          <input type="date" id="fecha" [(ngModel)]="fecha" name="fecha" class="form-control">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label> </label>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
+            <button type="button" class="btn btn-secondary flex-grow-1" (click)="onClear()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

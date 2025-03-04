@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Prestamo } from '../../models/prestamos/prestamo.model';
 import { environment } from '../../../../enviroments/environment';
 
@@ -12,7 +13,38 @@ export class PrestamoService {
 
   constructor(private http: HttpClient) {}
 
-  getPrestamos(): Observable<Prestamo[]> {
-    return this.http.get<Prestamo[]>(this.apiUrl);
+  getPrestamos(page: number, size: number = 4): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<any>(`${this.apiUrl}/filter`, { params }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  filterPrestamos(nombreJuego: string, nombreCliente: string, fecha: string, page: number, size: number = 4): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (nombreJuego) {
+      params = params.set('nombreJuego', nombreJuego);
+    }
+    if (nombreCliente) {
+      params = params.set('nombreCliente', nombreCliente);
+    }
+    if (fecha) {
+      params = params.set('fecha', fecha);
+    }
+    return this.http.get<any>(`${this.apiUrl}/filter`, { params }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side or network error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Backend error
+      errorMessage = `Error: ${error.error}`;
+    }
+    return throwError(errorMessage);
   }
 }
