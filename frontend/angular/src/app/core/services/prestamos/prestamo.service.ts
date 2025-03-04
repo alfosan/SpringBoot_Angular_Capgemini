@@ -36,6 +36,12 @@ export class PrestamoService {
     );
   }
 
+  createPrestamo(prestamo: Partial<Prestamo>): Observable<Prestamo> {
+    return this.http.post<Prestamo>(this.apiUrl, prestamo).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {
@@ -43,7 +49,7 @@ export class PrestamoService {
       errorMessage = `Error: ${error.error.message}`;
     } else {
       // Backend error
-      errorMessage = `Error: ${error.error}`;
+      errorMessage = error.error.message || error.message || 'An unknown error occurred!';
     }
     return throwError(errorMessage);
   }

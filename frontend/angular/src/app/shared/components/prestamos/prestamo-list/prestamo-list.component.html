@@ -25,6 +25,13 @@
         </table>
       </div>
       <app-prestamo-pagination [totalPages]="totalPages" [currentPage]="currentPage" (pageChange)="onPageChange($event)"></app-prestamo-pagination>
+      <button class="btn btn-success mt-4" (click)="openCreateModal()">Create New Prestamo</button>
     </div>
   </div>
+
+  <app-prestamo-create
+    *ngIf="showCreateModal"
+    (create)="createPrestamo($event)"
+    (close)="closeCreateModal()">
+  </app-prestamo-create>
 </div>
