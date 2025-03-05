@@ -5,12 +5,13 @@ import { Prestamo } from '../../../../core/models/prestamos/prestamo.model';
 import { PrestamoFiltersComponent } from '../prestamo-filters/prestamo-filters.component';
 import { PrestamoPaginationComponent } from '../prestamo-pagination/prestamo-pagination.component';
 import { PrestamoCreateComponent } from '../prestamos-create/prestamo-create.component';
+import { PrestamoDeleteComponent } from '../prestamo-delete/prestamo-delete.component';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-prestamo-list',
   standalone: true,
-  imports: [CommonModule, PrestamoFiltersComponent, PrestamoPaginationComponent, PrestamoCreateComponent],
+  imports: [CommonModule, PrestamoFiltersComponent, PrestamoPaginationComponent, PrestamoCreateComponent, PrestamoDeleteComponent],
   templateUrl: './prestamo-list.component.html',
   styleUrls: ['./prestamo-list.component.css']
 })
@@ -20,6 +21,8 @@ export class PrestamoListComponent implements OnInit {
   currentPage: number = 0;
   filters: { nombreJuego: string, nombreCliente: string, fecha: string } = { nombreJuego: '', nombreCliente: '', fecha: '' };
   showCreateModal: boolean = false;
+  showDeleteModal: boolean = false;
+  prestamoToDelete: Prestamo | null = null;
 
   constructor(private prestamoService: PrestamoService) {}
 
@@ -69,6 +72,28 @@ export class PrestamoListComponent implements OnInit {
       (newPrestamo: Prestamo) => {
         this.prestamos.push(newPrestamo);
         this.closeCreateModal();
+      },
+      (error: any) => {
+        this.showError(error);
+      }
+    );
+  }
+
+  openDeleteModal(prestamo: Prestamo) {
+    this.prestamoToDelete = prestamo;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.prestamoToDelete = null;
+  }
+
+  deletePrestamo(id: number) {
+    this.prestamoService.deletePrestamo(id).subscribe(
+      () => {
+        this.prestamos = this.prestamos.filter(prestamo => prestamo.id !== id);
+        this.closeDeleteModal();
       },
       (error: any) => {
         this.showError(error);

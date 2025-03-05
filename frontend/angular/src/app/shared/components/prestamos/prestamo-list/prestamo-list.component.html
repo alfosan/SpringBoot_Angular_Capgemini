@@ -11,6 +11,7 @@
               <th>Client</th>
               <th>Creation Date</th>
               <th>Return Date</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -20,6 +21,9 @@
               <td>{{ prestamo.nombreCliente }}</td>
               <td>{{ prestamo.fechaCreacion }}</td>
               <td>{{ prestamo.fechaDevolucion }}</td>
+              <td>
+                <button class="btn btn-danger" (click)="openDeleteModal(prestamo)">Delete</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -34,4 +38,11 @@
     (create)="createPrestamo($event)"
     (close)="closeCreateModal()">
   </app-prestamo-create>
+
+  <app-prestamo-delete
+    *ngIf="showDeleteModal"
+    [prestamo]="prestamoToDelete"
+    (delete)="deletePrestamo($event)"
+    (close)="closeDeleteModal()">
+  </app-prestamo-delete>
 </div>

@@ -1,25 +1,31 @@
 <div class="modal">
-    <div class="modal-content">
-      <span class="close" (click)="onClose()">&times;</span>
-      <h2>Create Prestamo</h2>
-      <form (ngSubmit)="onCreate()">
-        <div class="form-group">
-          <label for="nombreJuego">Game Name</label>
-          <input type="text" id="nombreJuego" [(ngModel)]="nombreJuego" name="nombreJuego" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="nombreCliente">Client Name</label>
-          <input type="text" id="nombreCliente" [(ngModel)]="nombreCliente" name="nombreCliente" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="fechaCreacion">Creation Date</label>
-          <input type="date" id="fechaCreacion" [(ngModel)]="fechaCreacion" name="fechaCreacion" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="fechaDevolucion">Return Date</label>
-          <input type="date" id="fechaDevolucion" [(ngModel)]="fechaDevolucion" name="fechaDevolucion" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
-      </form>
-    </div>
+  <div class="modal-content">
+    <span class="close" (click)="onClose()">&times;</span>
+    <h2>Create Prestamo</h2>
+    <form (ngSubmit)="onCreate()">
+      <div class="form-group">
+        <label for="nombreJuego">Game Name</label>
+        <select id="nombreJuego" [(ngModel)]="nombreJuego" name="nombreJuego" class="form-control" required>
+          <option value="" disabled selected>Seleccione game</option>
+          <option *ngFor="let juego of juegos" [value]="juego.titulo">{{ juego.titulo }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="nombreCliente">Client Name</label>
+        <select id="nombreCliente" [(ngModel)]="nombreCliente" name="nombreCliente" class="form-control" required>
+          <option value="" disabled selected>Seleccione client</option>
+          <option *ngFor="let cliente of clientes" [value]="cliente.nombre">{{ cliente.nombre }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fechaCreacion">Creation Date</label>
+        <input type="date" id="fechaCreacion" [(ngModel)]="fechaCreacion" name="fechaCreacion" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="fechaDevolucion">Return Date</label>
+        <input type="date" id="fechaDevolucion" [(ngModel)]="fechaDevolucion" name="fechaDevolucion" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
   </div>
+</div>
