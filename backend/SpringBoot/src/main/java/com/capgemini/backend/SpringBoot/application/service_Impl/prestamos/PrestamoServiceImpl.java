@@ -6,9 +6,12 @@ import com.capgemini.backend.SpringBoot.application.service.games.GameService;
 import com.capgemini.backend.SpringBoot.application.service.prestamos.PrestamoService;
 import com.capgemini.backend.SpringBoot.domain.model.prestamos.Prestamo;
 import com.capgemini.backend.SpringBoot.domain.repo.prestamos.PrestamoRepository;
+import com.capgemini.backend.SpringBoot.infraestructure.common.criteria.SearchCriteria;
+import com.capgemini.backend.SpringBoot.infraestructure.jpa.repo_Impl.prestamos.PrestamoSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -110,21 +113,19 @@ public class PrestamoServiceImpl implements PrestamoService {
 
     @Override
     public Page<Prestamo> findByFilters(String nombreJuego, String nombreCliente, LocalDate fecha, Pageable pageable) {
-        Page<Prestamo> prestamos;
-        if (nombreJuego != null && nombreCliente != null && fecha != null) {
-            prestamos = prestamoRepository.findByNombreJuegoContainingAndNombreClienteContainingAndFechaCreacionLessThanEqualAndFechaDevolucionGreaterThanEqual(
-                    nombreJuego, nombreCliente, fecha, fecha, pageable);
-        } else if (nombreJuego != null && nombreCliente != null) {
-            prestamos = prestamoRepository.findByNombreJuegoContainingAndNombreClienteContaining(nombreJuego, nombreCliente, pageable);
-        } else if (fecha != null) {
-            prestamos = prestamoRepository.findByFechaCreacionLessThanEqualAndFechaDevolucionGreaterThanEqual(fecha, fecha, pageable);
-        } else if (nombreJuego != null) {
-            prestamos = prestamoRepository.findByNombreJuegoContainingAndNombreClienteContaining(nombreJuego, "", pageable);
-        } else if (nombreCliente != null) {
-            prestamos = prestamoRepository.findByNombreJuegoContainingAndNombreClienteContaining("", nombreCliente, pageable);
-        } else {
-            prestamos = prestamoRepository.findAll(pageable);
+        Specification<Prestamo> spec = Specification.where(null);
+
+        if (nombreJuego != null && !nombreJuego.isEmpty()) {
+            spec = spec.and(new PrestamoSpecification(new SearchCriteria("nombreJuego", ":", nombreJuego)));
         }
+        if (nombreCliente != null && !nombreCliente.isEmpty()) {
+            spec = spec.and(new PrestamoSpecification(new SearchCriteria("nombreCliente", ":", nombreCliente)));
+        }
+        if (fecha != null) {
+            spec = spec.and(new PrestamoSpecification(new SearchCriteria("fechaCreacion", ":", fecha)));
+        }
+
+        Page<Prestamo> prestamos = prestamoRepository.findAll(spec, pageable);
 
         if (prestamos.isEmpty()) {
             throw new FiltroFallidoException("No se encontraron préstamos con los filtros proporcionados.");
