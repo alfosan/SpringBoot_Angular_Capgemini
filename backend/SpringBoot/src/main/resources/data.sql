@@ -1,7 +1,7 @@
 INSERT INTO cliente (nombre) VALUES ('Llorens Alfonso');
 INSERT INTO cliente (nombre) VALUES ('Joan Ramirez');
 INSERT INTO cliente (nombre) VALUES ('Marta Sanchez');
-INSERT INTO cliente (nombre) VALUES ('Jordi Martínez');
+INSERT INTO cliente (nombre) VALUES ('Jordi Martinez');
 
 INSERT INTO game (titulo) VALUES ('Valorant');
 INSERT INTO game (titulo) VALUES ('League of Legends');
